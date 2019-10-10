@@ -35,3 +35,14 @@ raw.img -> | UploadHandler | ---> | FaceModel |
 ```
 
 
+
+## How  To Use
+
+### Easy run
+
+open the project fold and execute this command, visit localhost:8848/upload to test the upload function.
+
+```
+python run.py
+```
+
