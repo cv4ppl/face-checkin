@@ -2,22 +2,21 @@
 Main entrance for starting server
 """
 
-import argparse
-
 import tornado.ioloop
 import tornado.web
+from tornado.options import define, options
 
 from src.server.upload_handler import UploadHandler
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--port", type=int, default=8848)
-    args = parser.parse_args()
+    define('port', default=8848, help='run on this port', type=int)
+    define('debug', default=True, help='enable debug mode')
+    tornado.options.parse_command_line()
 
     tornado.web.Application([
         ("/upload", UploadHandler),
-    ]).listen(args.port)
+    ]).listen(options.port)
 
     tornado.ioloop.IOLoop.instance().start()
 
