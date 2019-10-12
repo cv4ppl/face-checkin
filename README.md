@@ -28,6 +28,8 @@ raw.img -> | UploadHandler | ---> | FaceModel |
      |
      |- model
      |  |- img2id.py
+     |  |- detect_face.py
+     |  |- match_face.py
      |
      |- templates
         |- upload.html
