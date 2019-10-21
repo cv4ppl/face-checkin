@@ -6,17 +6,20 @@ post method will do uploading action.
 
 import json
 import os
+import tornado
 from typing import Optional, Awaitable
 
 from tornado.web import RequestHandler
 
 from src.server.file_manager import FileManager
+from src.server.base_handler import BaseHandler
 
 
-class UploadHandler(RequestHandler):
+class UploadHandler(BaseHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         pass
-
+    
+    @tornado.web.authenticated
     def get(self):
         return self.render("../templates/upload.html")
 
