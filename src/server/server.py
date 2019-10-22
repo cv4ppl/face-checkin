@@ -7,7 +7,7 @@ import tornado.options
 import tornado.web
 
 from src.server.upload_handler import UploadHandler
-from src.server.login_handler import LoginHandler
+from src.server.login_handler import LoginHandler, ManagerHandler, RegisterHandler
 
 class Server:
     def __init__(self):
@@ -19,6 +19,8 @@ class Server:
         self.app = tornado.web.Application([
             ("/login", LoginHandler),
             ("/upload", UploadHandler),
+            ("/manage", ManagerHandler),
+            ("/register", RegisterHandler)
         ], **settings)
         self.app.listen(tornado.options.options.port)
 
