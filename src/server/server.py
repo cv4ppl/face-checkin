@@ -14,7 +14,9 @@ class Server:
         settings = {
             "debug": True,
             "login_url": "/login",
-            "cookie_secret": "cv4ppl/face-checkin"
+            "cookie_secret": "cv4ppl/face-checkin",
+            'template_path': 'src\\templates',
+            'static_path': 'src\\static'
         }
         self.app = tornado.web.Application([
             ("/login", LoginHandler),

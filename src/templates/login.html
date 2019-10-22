@@ -20,7 +20,7 @@
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
-  <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.js"></script>
+  <script src="{{ static_url('js/md5.js') }}"></script>
   <script type="text/javascript">
   	function md5_passwd(){
   		document.getElementById("passwd_md5").value = md5(document.getElementById("pw_pre_md5").value)
