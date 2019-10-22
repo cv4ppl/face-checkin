@@ -51,13 +51,10 @@ class BackendService:
         return self.execute_sql("""SELECT cid FROM Courses""")
 
     def get_user_by_uid(self, uid: str):
-        return self.execute_sql("""SELECT * FROM Users WHERE uid = '%s'""" % uid)
+        return self.execute_sql("""SELECT * FROM Users WHERE uid = %s""" % uid)
 
     def get_course_by_cid(self, cid: str):
-        return self.execute_sql("""SELECT * FROM Courses WHERE cid = '%s'""" % cid)
+        return self.execute_sql("""SELECT * FROM Courses WHERE cid = %s""" % cid)
 
     def get_records(self):
         return self.execute_sql("""SELECT * FROM Records""")
-
-    def commit(self):
-        self.__conn.commit()
