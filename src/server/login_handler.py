@@ -2,6 +2,14 @@ import hashlib
 
 from src.server.base_handler import BaseHandler
 
+# class authenticated:
+# 	def __init__(self, role):
+#         self.role = role
+
+#     def __call__(self, func):
+#     	def student_wrapper(self, *args, **kwargs):
+
+
 class LoginHandler(BaseHandler):
     def get(self):
         self.render("../templates/login.html")
@@ -26,7 +34,7 @@ class RegisterHandler(BaseHandler):
     def post(self):
         # TODO(): insert (user, md5(user.lower()), md5(password), role) 
         username = self.get_argument("name")
-        uid = hashlib.md5(username)
+        uid = hashlib.md5(username.lower().encode('utf-8').hexdigest())
         password = self.get_argument("password")
         role = self.get_argument("role")
         # from backend import ?
