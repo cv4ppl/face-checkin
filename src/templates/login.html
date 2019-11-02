@@ -6,26 +6,10 @@
 
     <meta charset="UTF-8">
     <title>Title</title>
-    <style type="text/css">
-        .main {
-            background-color: #fff;
-            border-radius: 20px;
-            width: 300px;
-            height: 350px;
-            margin: auto;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-    </style>
     <script src="{{ static_url('js/md5.js') }}"></script>
     <script src="{{ static_url('js/index.js') }}"></script>
     <script type="text/javascript">
-        function md5_pwd() {
-            document.getElementById("passwd_md5").value = md5(document.getElementById("pw_pre_md5").value)
-        }
+
     </script>
 </head>
 <body>
@@ -45,11 +29,11 @@
             <div class="input">
                 <label for="name">姓名</label>
                 <input id="name" name="name" type="text">
-                 <span class="spin"></span>
+                <span class="spin"></span>
             </div>
             <div class="input">
                 <label for="pw_pre_md5">密码</label>
-                <input id="pw_pre_md5" type="password" name="pw_pre_md5">
+                <input id="pw_pre_md5" name="pw_pre_md5" type="password">
                 <span class="spin"></span>
             </div>
 
