@@ -1,50 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <style type="text/css">
-        .main
-        {
-		    background-color: #fff;
-		    border-radius: 20px;
-		    width: 300px;
-		    height: 350px;
-		    margin: auto;
-		    position: absolute;
-		    top: 0;
-		    left: 0;
-		    right: 0;
-		    bottom: 0;
-        }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-  <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
-  <script src="{{ static_url('js/md5.js') }}"></script>
-  <script type="text/javascript">
-  	function md5_passwd(){
-  		document.getElementById("passwd_md5").value = md5(document.getElementById("pw_pre_md5").value)
-  	}
-  </script>
+    <link href="{{ static_url('css/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ static_url('css/style.css') }}" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{{ static_url('js/md5.js') }}"></script>
+    <script src="{{ static_url('js/index.js') }}"></script>
+    <script type="text/javascript">
+
+    </script>
 </head>
 <body>
-  <div class="main">
-    <form action="login" enctype="multipart/form-data" method="post">
-      姓名: <input type="text" name="name">
-      <br />
-      密码: <input type="password" id="pw_pre_md5">
-      <br />
-      身份:
-      <select name="role">
-      	<option value="Admin">管理员</option>
-      	<option value="Student">学生</option>
-      </select>
-      <br/>
-      <input type="hidden" id="passwd_md5" name="passwd"/>
-      <input type="submit" value="Sign in" onclick="md5_passwd()" />
-    </form>
-  </div>
-<script>
-</script>
+
+<div align="center" class="logo">
+    <img height="100px" src="{{ static_url('images/logo.png') }}">
+</div>
+<div align="center" class="title">
+    <img height="80px" src="{{ static_url('images/title.png') }}">
+</div>
+
+<div class="materialContainer">
+    <div class="box">
+
+        <form action="login" enctype="multipart/form-data" method="post">
+            <div class="title">登录</div>
+            <div class="input">
+                <label for="name">姓名</label>
+                <input id="name" name="name" type="text">
+                <span class="spin"></span>
+            </div>
+            <div class="input">
+                <label for="pw_pre_md5">密码</label>
+                <input id="pw_pre_md5" name="pw_pre_md5" type="password">
+                <span class="spin"></span>
+            </div>
+
+            <div>
+                <label for="name">身份</label>
+                <select name="role">
+                    <option value="Admin">管理员</option>
+                    <option value="Student">学生</option>
+                </select>
+                <span class="spin"></span>
+
+            </div>
+
+            <input id="passwd_md5" name="passwd" type="hidden"/>
+
+            <div class="button login">
+                <button onclick="md5_pwd()" type="submit" value="Sign in">
+                    <span>登录</span>
+                    <i class="fa fa-check"></i>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+
+    <div class="overbox">
+        <div class="material-button alt-2">
+            <span class="shape"></span>
+        </div>
+        <div class="title">注册</div>
+        <div class="input">
+            <label for="regname">用户名</label>
+            <input id="regname" name="regname" type="text">
+            <span class="spin"></span>
+        </div>
+        <div class="input">
+            <label for="regpass">密码</label>
+            <input id="regpass" name="regpass" type="password">
+            <span class="spin"></span>
+        </div>
+        <div class="input">
+            <label for="reregpass">确认密码</label>
+            <input id="reregpass" name="reregpass" type="password">
+            <span class="spin"></span>
+        </div>
+        <div class="button">
+            <button>
+                <span>注册</span>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script src="{{ static_url('js/jquery.min.js') }}"></script>
+<script src="{{ static_url('js/index.js') }}"></script>
+
 </body>
 </html>
