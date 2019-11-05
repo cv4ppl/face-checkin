@@ -44,11 +44,10 @@
                     <option value="Student">学生</option>
                 </select>
                 <span class="spin"></span>
-
             </div>
             <input id="passwd_md5" name="password" type="hidden"/>
             <div class="button login">
-                <button onclick="md5_pwd()" type="submit" value="Sign in">
+                <button onclick="md5_pwd('login')" type="submit" value="Sign in">
                     <span>登录</span>
                     <i class="fa fa-check"></i>
                 </button>
@@ -62,7 +61,6 @@
 
 
     <div class="overbox">
-
         <form action="register" enctype="multipart/form-data" method="post">
             <div class="material-button alt-2">
                 <span class="shape"></span>
@@ -92,13 +90,15 @@
                 <span class="spin"></span>
 
             </div>
-            <!--            <input id="passwd_md5" name="password" type="hidden"/>-->
+            <input id="register_passwd_md5" name="password" type="hidden"/>
             <div class="button" style="width: 100%">
-                <button style="width: 45%;" type="submit">
-                    <span>学生注册</span>
-                </button>
-                <button style="width: 45%; float: right" type="submit">
+                <button onclick="md5_pwd('register')" style="width: 45%;" type="submit">
                     <span>老师注册</span>
+                </button>
+                <button onclick="document.getElementById('registerRole').value='Student'; md5_pwd('register')"
+                        style="width: 45%; float: right"
+                        type="submit">
+                    <span>学生注册</span>
                 </button>
             </div>
         </form>

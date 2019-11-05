@@ -42,9 +42,19 @@ class BackendService:
         self.__cursor = self.__conn.cursor()
 
     def exist_user(self, username: str, uid: str, password: str, role: str) -> bool:
-        count = self.__cursor.execute('SELECT COUNT(*) FROM Users WHERE NAME = ? AND UID = ? AND '
-                                      'PASSWORD = ? AND ROLE = ?', (username, uid, password, role))
-        return count == 1
+        if password:
+            count = self.__cursor.execute('SELECT * FROM USERS WHERE NAME = ? AND UID = ? AND '
+                                          'PASSWORD = ? AND ROLE = ?', (username, uid, password, role))
+            return len(count.fetchall()) == 1
+        else:
+            count = self.__cursor.execute('SELECT * FROM USERS WHERE NAME = ? AND UID = ?', (username, uid))
+            return len(count.fetchall()) == 1
+
+    def register_user(self, username: str, uid: str, password: str, role: str) -> bool:
+        self.__cursor.execute('INSERT INTO USERS (name, uid, password, role) VALUES (?, ?, ?, ?)'
+                              , (username, uid, password, role))
+        # print(self.__cursor.execute("SELECT * FROM USERS").fetchall())
+        self.commit()
 
     def execute_sql(self, sql: str):
         return self.__cursor.execute(sql).fetchall()
