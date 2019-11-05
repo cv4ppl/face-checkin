@@ -41,6 +41,11 @@ class BackendService:
         self.__conn = sqlite3.connect(tornado.options.options.db_absl_path)
         self.__cursor = self.__conn.cursor()
 
+    def exist_user(self, username: str, uid: str, password: str, role: str) -> bool:
+        count = self.__cursor.execute('SELECT COUNT(*) FROM Users WHERE NAME = ? AND UID = ? AND '
+                                      'PASSWORD = ? AND ROLE = ?', (username, uid, password, role))
+        return count == 1
+
     def execute_sql(self, sql: str):
         return self.__cursor.execute(sql).fetchall()
 
