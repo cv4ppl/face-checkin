@@ -41,13 +41,12 @@ class RegisterHandler(BaseHandler):
 
 
 class ManagerHandler(BaseHandler):
-
-    @tornado.web.authenticated
+    @BaseHandler.admin_authentiated
     def get(self):
         # TODO(): Base page, show all course with button(redirect dashboard?uid=*&cid=*)
-        print(self.get_current_role())
-        if self.get_current_role() == b'Student':
-            return self.redirect("/upload")
+        # print(self.get_current_role())
+        # if self.get_current_role() == b'Student':
+        #     return self.redirect("/upload")
         self.render("../templates/manage.html")
         pass
 
