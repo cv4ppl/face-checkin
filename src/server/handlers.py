@@ -1,6 +1,8 @@
 import json
 import os
-
+import time
+import cv2
+import datetime
 from tornado import web
 
 from src.server.backend_service import BackendService
@@ -26,7 +28,6 @@ class LoginHandler(BaseHandler):
         # check auth_role legal (need move to front end)
         if auth_role not in ("Admin", "Student"):
             self.redirect("/login")
-        self.set_role(auth_role)
         if auth_role == 'Admin':
             self.redirect("/manage")
         else:
@@ -37,7 +38,7 @@ class ManagerHandler(BaseHandler):
     @web.authenticated
     def get(self):
         # TODO(): Base page, show all course with button(redirect dashboard?uid=*&cid=*)
-        self.render("../templates/manage.html")
+        self.render("manage.html")
         pass
 
     @web.authenticated
@@ -63,5 +64,37 @@ class UploadHandler(BaseHandler):
             return
 
         path = "/var/tmp" if os.path.exists('/var/tmp') else os.curdir + os.path.sep + 'tmp'
-        FileManager.write(path, file_metas[0]['body'])
+        filename = FileManager.write(path, file_metas[0]['body'])
+        cv2.imread(os.path.join(path, filename))
         self.redirect("/")
+
+class DashboardHandler(BaseHandler):
+    # @web.authenticated
+    def get(self):
+        uid = self.get_current_user()
+        uid = "1"
+        user = global_backend_service.get_user_by_uid(uid)[0]
+
+        assert user[-1] in ("admin", "student")
+        if user[-1] == "admin":
+            valid_list = global_backend_service.get_all_records()
+        else:
+            valid_list = global_backend_service.get_user_by_uid(user[0])
+
+        stringed_list = []
+
+        for item in valid_list:
+            print(global_backend_service.get_course_by_cid(item[1]))
+            print(item[2])
+            stringed_list.append({
+                "username": global_backend_service.get_user_by_uid(item[0])[0][1],
+                "course": global_backend_service.get_course_by_cid(item[1])[0][1],
+                "time": datetime.datetime.fromtimestamp(item[2] / 1000.0),
+                "color": "green" if item[3] else "red"
+            })
+
+        self.render(
+            template_name="dashboard.html",
+            username=user[1],
+            records=stringed_list,
+        )

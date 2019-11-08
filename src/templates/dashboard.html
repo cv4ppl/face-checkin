@@ -2,9 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Dashboard</title>
 </head>
+<!-- TODO(Schureed): 1. modifies UI -->
+<!-- TODO(Schureed): 2. filter (name, time span and course combined) -->
 <body>
-$END$
+<div class="record-table">
+<div class="upload">
+  <button onclick="window.location.href='/upload'" style="width: 100%;">Check In</button>
+</div>
+{% for record in records %}
+ <div class="record" style="display: grid; grid-template-columns: 20% 20% 60%; color: {{record['color']}}">
+   <div class="name">{{record["username"]}}</div>
+   <div class="course">{{record["course"]}}</div>
+   <div class="time">{{record["time"]}}</div>
+ </div>
+{% end %}
+</div>
 </body>
 </html>

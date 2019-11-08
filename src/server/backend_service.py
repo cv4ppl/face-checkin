@@ -20,10 +20,10 @@ class BackendService:
     role: admin / teacher / student
 
     ----------------- Courses ------------------
-    | cid | uid | checkin_open | checkin_close |
+    | cid | name | checkin_open | checkin_close |
     --------------------------------------------
     cid: course id
-    uid: teacher
+    name: course name
     checkin_open: timestamp for checkin to open
     checkin_close: timestamp for checkin to close
 
@@ -56,8 +56,11 @@ class BackendService:
     def get_course_by_cid(self, cid: str):
         return self.execute_sql("""SELECT * FROM Courses WHERE cid = '%s'""" % cid)
 
-    def get_records(self):
+    def get_all_records(self):
         return self.execute_sql("""SELECT * FROM Records""")
+
+    def get_records_by_uid(self, uid: str):
+        return self.execute_sql("""SELECT * FROM Records WHERE uid = '%s'""" % uid)
 
     def commit(self):
         self.__conn.commit()
