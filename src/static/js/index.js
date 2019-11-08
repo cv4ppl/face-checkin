@@ -119,6 +119,10 @@ $(function () {
 });
 
 
-function md5_pwd() {
-    document.getElementById("passwd_md5").value = md5(document.getElementById("pw_pre_md5").value)
+function md5_pwd(sign) {
+    if (sign == 'login') {
+        document.getElementById("passwd_md5").value = md5(document.getElementById("pw_pre_md5").value)
+    } else if (sign == 'register') {
+        document.getElementById("register_passwd_md5").value = md5(document.getElementById("regpass").value)
+    }
 }
