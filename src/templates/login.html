@@ -38,53 +38,71 @@
             </div>
 
             <div>
-                <label for="name">身份</label>
-                <select name="role">
+                <label for="role">身份</label>
+                <select id="role" name="role">
                     <option value="Admin">管理员</option>
                     <option value="Student">学生</option>
                 </select>
                 <span class="spin"></span>
-
             </div>
-
-            <input id="passwd_md5" name="passwd" type="hidden"/>
-
+            <input id="passwd_md5" name="password" type="hidden"/>
             <div class="button login">
-                <button onclick="md5_pwd()" type="submit" value="Sign in">
+                <button onclick="md5_pwd('login')" type="submit" value="Sign in">
                     <span>登录</span>
                     <i class="fa fa-check"></i>
                 </button>
             </div>
 
         </form>
+        <!--        <div class="box">-->
+        <!--            <p id="infoBox"> <strong> {{ info }}}</strong></p>-->
+        <!--        </div>-->
     </div>
 
 
     <div class="overbox">
-        <div class="material-button alt-2">
-            <span class="shape"></span>
-        </div>
-        <div class="title">注册</div>
-        <div class="input">
-            <label for="regname">用户名</label>
-            <input id="regname" name="regname" type="text">
-            <span class="spin"></span>
-        </div>
-        <div class="input">
-            <label for="regpass">密码</label>
-            <input id="regpass" name="regpass" type="password">
-            <span class="spin"></span>
-        </div>
-        <div class="input">
-            <label for="reregpass">确认密码</label>
-            <input id="reregpass" name="reregpass" type="password">
-            <span class="spin"></span>
-        </div>
-        <div class="button">
-            <button>
-                <span>注册</span>
-            </button>
-        </div>
+        <form action="register" enctype="multipart/form-data" method="post">
+            <div class="material-button alt-2">
+                <span class="shape"></span>
+            </div>
+            <div class="title">注册</div>
+            <div class="input">
+                <label for="regname">用户名</label>
+                <input id="regname" name="name" type="text">
+                <span class="spin"></span>
+            </div>
+            <div class="input">
+                <label for="regpass">密码</label>
+                <input id="regpass" name="password" type="password">
+                <span class="spin"></span>
+            </div>
+            <div class="input">
+                <label for="reregpass">确认密码</label>
+                <input id="reregpass" name="reregpass" type="password">
+                <span class="spin"></span>
+            </div>
+            <div>
+                <label for="registerRole">身份</label>
+                <select id="registerRole" name="registerRole">
+                    <option value="Admin">管理员</option>
+                    <option value="Student">学生</option>
+                </select>
+                <span class="spin"></span>
+
+            </div>
+            <input id="register_passwd_md5" name="password" type="hidden"/>
+            <div class="button" style="width: 100%">
+                <button onclick="md5_pwd('register')" style="width: 45%;" type="submit">
+                    <span>老师注册</span>
+                </button>
+                <button onclick="document.getElementById('registerRole').value='Student'; md5_pwd('register')"
+                        style="width: 45%; float: right"
+                        type="submit">
+                    <span>学生注册</span>
+                </button>
+            </div>
+        </form>
+
     </div>
 
 </div>

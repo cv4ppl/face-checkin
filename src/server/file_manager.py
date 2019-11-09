@@ -31,4 +31,3 @@ class FileManager:
         filename = FileManager.get_filename_by_byte_array(bytearray(content))
         with open(os.path.join(path, filename), "wb") as f:
             f.write(bytearray(content))
-            return filename
