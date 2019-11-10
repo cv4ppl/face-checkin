@@ -7,7 +7,8 @@ from tornado import web
 
 from src.server.backend_service import BackendService
 from src.server.file_manager import FileManager
-
+from src.model.retain_face.detect import predict_by_filename
+from src.model.single_face_model import SingleFaceModel
 global_backend_service = BackendService()
 
 """
@@ -21,6 +22,7 @@ import hashlib
 from tornado.web import RequestHandler
 from tornado.web import authenticated
 
+single_face_model = SingleFaceModel()
 
 class BaseHandler(RequestHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
@@ -95,7 +97,13 @@ class UploadHandler(BaseHandler):
 
         path = "/var/tmp" if os.path.exists('/var/tmp') else os.curdir + os.path.sep + 'tmp'
         filename = FileManager.write(path, file_metas[0]['body'])
-        img = cv2.imread(os.path.join(path, filename))
+        print(filename, flush=True)
+        faces = predict_by_filename(filename)
+        ok = []
+        for face in faces:
+            print(face.shape, flush=True)
+            ok.append(single_face_model.get_id_by_image(face))
+            print(ok[-1], flush=True)
 
         self.redirect("/")
 
