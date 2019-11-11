@@ -14,7 +14,6 @@ from tornado import options
 from src.model import utils
 from src.server.backend_service import BackendService
 
-
 class DataProvider:
     def __init__(self):
         self.backend_service = BackendService()
@@ -54,6 +53,9 @@ class SingleFaceModel:
         :param show: to show result image?
         :return: id
         """
+
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
         shape = img.shape
         img, _ = utils.Utils.im2vec(img.shape, img)
         _dif = np.load(os.path.join(options.options.data_path, "mat", "dif.npy"))
