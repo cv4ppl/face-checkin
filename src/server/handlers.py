@@ -24,6 +24,7 @@ from tornado.web import authenticated
 
 single_face_model = SingleFaceModel()
 
+
 class BaseHandler(RequestHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         pass
@@ -113,11 +114,10 @@ class DashboardHandler(BaseHandler):
     # @web.authenticated
     def get(self):
         uid = self.get_current_user()
-        uid = "1"
         user = global_backend_service.get_user_by_uid(uid)[0]
 
-        assert user[-1] in ("admin", "student")
-        if user[-1] == "admin":
+        assert user[-1] in ("Admin", "student")
+        if user[-1] == "Admin":
             valid_list = global_backend_service.get_all_records()
         else:
             valid_list = global_backend_service.get_user_by_uid(user[0])
