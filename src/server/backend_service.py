@@ -50,11 +50,19 @@ class BackendService:
             count = self.__cursor.execute('SELECT * FROM USERS WHERE NAME = ? AND UID = ?', (username, uid))
             return len(count.fetchall()) == 1
 
-    def register_user(self, username: str, uid: str, password: str, role: str) -> bool:
+    def register_user(self, username: str, uid: str, password: str, role: str) -> None:
         self.__cursor.execute('INSERT INTO USERS (name, uid, password, role) VALUES (?, ?, ?, ?)'
                               , (username, uid, password, role))
         # print(self.__cursor.execute("SELECT * FROM USERS").fetchall())
         self.commit()
+
+    def get_courses(self):
+        courses = self.__cursor.execute('SELECT CID, NAME, CHECKIN_OPEN, CHECKIN_CLOSE FROM COURSES').fetchall()
+        return courses
+
+    def get_user_records(self, uid):
+        records = self.__cursor.execute('SELECT CID, TIME FROM RECORDS WHERE RECORDS.UID = ?', (uid,)).fetchall()
+        return records
 
     def execute_sql(self, sql: str):
         return self.__cursor.execute(sql).fetchall()

@@ -62,7 +62,7 @@ class BaseHandler(RequestHandler):
         return BaseHandler.role_authenticated(role='Student', method=method)
 
     @staticmethod
-    def admin_authentiated(
+    def admin_authenticated(
             method: Callable[..., Optional[Awaitable[None]]]
     ) -> Callable[..., Optional[Awaitable[None]]]:
         return BaseHandler.role_authenticated(role='Admin', method=method)
@@ -174,7 +174,7 @@ class RegisterHandler(BaseHandler):
 
 
 class ManagerHandler(BaseHandler):
-    @BaseHandler.admin_authentiated
+    @BaseHandler.admin_authenticated
     def get(self):
         # TODO(): Base page, show all course with button(redirect dashboard?uid=*&cid=*)
         # print(self.get_current_role())
@@ -193,7 +193,25 @@ class ManagerHandler(BaseHandler):
 class CheckInHandler(BaseHandler):
     @web.authenticated
     def get(self):
-        self.render('checkin.html', courses=None)
+        uid = self.get_secure_cookie("uid")
+        courses = self.application.back_service.get_courses()
+        records = self.application.back_service.get_user_records(uid)
+        courses = sorted(courses)
+        records = sorted(records)
+        record_id = 0
+        courses_records = []
+        for course in courses:
+            is_checkin = True if record_id < len(records) and courses[0] == records[record_id][0] else False
+            courses_records.append({
+                "cid": course[0],
+                "name": course[1],
+                "time": str(course[2]) + '-' + str(course[3]),
+                # "checkin_num"
+                "is_checkin": is_checkin,
+                "disabled": "disabled" if is_checkin else ""
+            })
+            record_id += is_checkin
+        self.render('checkin.html', courses=courses_records)
 
     def post(self):
         pass
