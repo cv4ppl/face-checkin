@@ -5,14 +5,14 @@ mail: tianhengcheng@gmail.com
 copyright@wondervictor
 """
 
-import os
-import tqdm
-import pickle
 import argparse
+import os
+import pickle
+
 import numpy as np
-from scipy.io import loadmat
+import tqdm
 from bbox import bbox_overlaps
-from IPython import embed
+from scipy.io import loadmat
 
 
 def get_gt_boxes(gt_dir):
@@ -35,7 +35,6 @@ def get_gt_boxes(gt_dir):
 
 
 def get_gt_boxes_from_txt(gt_path, cache_dir):
-
     cache_file = os.path.join(cache_dir, 'gt_cache.pkl')
     if os.path.exists(cache_file):
         f = open(cache_file, 'rb')
@@ -80,7 +79,6 @@ def get_gt_boxes_from_txt(gt_path, cache_dir):
 
 
 def read_pred_file(filepath):
-
     with open(filepath, 'r') as f:
         lines = f.readlines()
         img_file = lines[0].rstrip('\n\r')
@@ -140,7 +138,7 @@ def norm_score(pred):
         for _, v in k.items():
             if len(v) == 0:
                 continue
-            v[:, -1] = (v[:, -1] - min_score)/diff
+            v[:, -1] = (v[:, -1] - min_score) / diff
 
 
 def image_eval(pred, gt, ignore, iou_thresh):
@@ -183,14 +181,14 @@ def img_pr_info(thresh_num, pred_info, proposal_list, pred_recall):
     pr_info = np.zeros((thresh_num, 2)).astype('float')
     for t in range(thresh_num):
 
-        thresh = 1 - (t+1)/thresh_num
+        thresh = 1 - (t + 1) / thresh_num
         r_index = np.where(pred_info[:, 4] >= thresh)[0]
         if len(r_index) == 0:
             pr_info[t, 0] = 0
             pr_info[t, 1] = 0
         else:
             r_index = r_index[-1]
-            p_index = np.where(proposal_list[:r_index+1] == 1)[0]
+            p_index = np.where(proposal_list[:r_index + 1] == 1)[0]
             pr_info[t, 0] = len(p_index)
             pr_info[t, 1] = pred_recall[r_index]
     return pr_info
@@ -205,7 +203,6 @@ def dataset_pr_info(thresh_num, pr_curve, count_face):
 
 
 def voc_ap(rec, prec):
-
     # correct AP calculation
     # first append sentinel values at the end
     mrec = np.concatenate(([0.], rec, [1.]))
@@ -260,7 +257,7 @@ def evaluation(pred, gt_path, iou_thresh=0.5):
                     continue
                 ignore = np.zeros(gt_boxes.shape[0])
                 if len(keep_index) != 0:
-                    ignore[keep_index-1] = 1
+                    ignore[keep_index - 1] = 1
                 pred_recall, proposal_list = image_eval(pred_info, gt_boxes, ignore, iou_thresh)
 
                 _img_pr_info = img_pr_info(thresh_num, pred_info, proposal_list, pred_recall)
@@ -282,22 +279,9 @@ def evaluation(pred, gt_path, iou_thresh=0.5):
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--pred', default="./widerface_txt/")
     parser.add_argument('-g', '--gt', default='./ground_truth/')
 
     args = parser.parse_args()
     evaluation(args.pred, args.gt)
-
-
-
-
-
-
-
-
-
-
-
-
