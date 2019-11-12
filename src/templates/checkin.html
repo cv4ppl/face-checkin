@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+    <link rel="stylesheet" src="{{ static_url('css/bootstrap.min.css') }}">
+</head>
+<body>
+<div id="course-table">
+    <table class="table">
+        <caption>
+            签到课程总览:
+        </caption>
+        <thead>
+        <tr>
+            <th> 课程名称</th>
+            <th> 签到时间</th>
+            <th> 已签到人数</th>
+            <th> 是否签到</th>
+            <th> 签到链接</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if courses %}
+        {% for course in courses %}
+        <th> {{ course["name"] }}</th>
+        <th> {{ course["time"] }}</th>
+        <th> {{ course["checkin_num"] }}</th>
+        <th> {{ course["is_checkin"] }}</th>
+        <th>
+            <button class="btn btn-primary" data-loading-text="Loading..." id="fat-btn">
+                签到
+            </button>
+        </th>
+        {% end %}
+        {% end %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+</script>
+</body>
+</html>

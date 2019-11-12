@@ -2,13 +2,13 @@ import datetime
 import json
 import os
 
-import cv2
 from tornado import web
 
-from src.server.backend_service import BackendService
-from src.server.file_manager import FileManager
 from src.model.retain_face.detect import predict_by_filename
 from src.model.single_face_model import SingleFaceModel
+from src.server.backend_service import BackendService
+from src.server.file_manager import FileManager
+
 global_backend_service = BackendService()
 
 """
@@ -65,6 +65,7 @@ class BaseHandler(RequestHandler):
             method: Callable[..., Optional[Awaitable[None]]]
     ) -> Callable[..., Optional[Awaitable[None]]]:
         return BaseHandler.role_authenticated(role='Admin', method=method)
+
 
 class ManagerHandler(BaseHandler):
     @web.authenticated
@@ -186,4 +187,13 @@ class ManagerHandler(BaseHandler):
         # TODO(): operation
         #                   -> insert course in Course
         #                   -> delete course (OPTIONAL)
+        pass
+
+
+class CheckInHandler(BaseHandler):
+    @web.authenticated
+    def get(self):
+        self.render('checkin.html', courses=None)
+
+    def post(self):
         pass
