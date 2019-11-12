@@ -3,21 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
+  <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css">
+
+  <!-- TODO(Schureed): 1. modifies UI -->
+  <!-- TODO(Schureed): 2. filter (name, time span and course combined) -->
 </head>
-<!-- TODO(Schureed): 1. modifies UI -->
-<!-- TODO(Schureed): 2. filter (name, time span and course combined) -->
 <body>
 <div class="record-table">
   <div class="upload">
     <button onclick="window.location.href='/upload'" style="width: 100%;">Check In</button>
   </div>
-  {% for record in records %}
-  <div class="record" style="display: grid; grid-template-columns: 20% 20% 60%; color: {{record['color']}}">
-    <div class="name">{{record["username"]}}</div>
-    <div class="course">{{record["course"]}}</div>
-    <div class="time">{{record["time"]}}</div>
-  </div>
-  {% end %}
+  <table class="display" id="myTable">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Class</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for record in records %}
+    <tr style="color: {{record['color']}}">
+      <td>{{record["username"]}}</td>
+      <td>{{record["course"]}}</td>
+      <td>{{record["time"]}}</td>
+    </tr>
+    {% end %}
+    </tbody>
+  </table>
 </div>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>
 </body>
 </html>

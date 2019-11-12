@@ -57,7 +57,9 @@ class BackendService:
         self.commit()
 
     def execute_sql(self, sql: str):
-        return self.__cursor.execute(sql).fetchall()
+        result = self.__cursor.execute(sql).fetchall()
+        self.commit()
+        return result
 
     def get_user_ids(self):
         return self.execute_sql("""SELECT uid FROM Users""")
