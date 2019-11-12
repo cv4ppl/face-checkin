@@ -14,6 +14,9 @@ from tornado import options
 from src.model import utils
 from src.server.backend_service import BackendService
 
+SYS_WIDTH = 96
+SYS_HEIGHT = 128
+
 
 class DataProvider:
     def __init__(self):
@@ -35,7 +38,7 @@ class DataProvider:
 
             if user[3]:
                 user_img = cv2.imread(user[3])
-                # print(user[3])
+                user_img = cv2.resize(user_img, (SYS_WIDTH, SYS_HEIGHT))
                 user_img = cv2.cvtColor(user_img, cv2.COLOR_BGR2GRAY)
                 user_img, _ = utils.Utils.im2vec(user_img.shape, user_img)
                 ids.append(user_id)
@@ -55,6 +58,7 @@ class SingleFaceModel:
         :return: id
         """
 
+        img = cv2.resize(img, (SYS_WIDTH, SYS_HEIGHT))
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         shape = img.shape
@@ -168,7 +172,7 @@ def test_acc():
     """
     options.define('db_absl_path', 'data/database', type=str, help="database to load")
     options.define('data_path', 'data', type=str, help="database to load")
-    options.parse_command_line()
+    # options.parse_command_line()
 
     model = SingleFaceModel()
     model.train()
@@ -176,9 +180,9 @@ def test_acc():
     acc_count = 0
     all_count = 0
     for i in range(1, 4 + 1):
-        for j in range(1, 10 + 1):
-            im = cv2.imread(os.path.join(options.options.data_path, "test", "s%d" % i, "%d.pgm" % j))
-            im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        for j in range(1, 2):
+            print(i, j)
+            im = cv2.imread(os.path.join(options.options.data_path, "test", "s%d" % i, "%d.jpg" % j))
             all_count += 1
             acc_count += (str(i) == str(model.get_id_by_image(im, True)))
 

@@ -20,6 +20,7 @@ import functools
 from typing import Optional, Awaitable, Callable
 import hashlib
 from tornado.web import RequestHandler
+import time
 from tornado.web import authenticated
 
 single_face_model = SingleFaceModel()
@@ -90,6 +91,7 @@ class UploadHandler(BaseHandler):
 
     @web.authenticated
     def post(self):
+        cid = int(self.get_argument("cid", "1"))  # TODO: get real cid
         file_metas = self.request.files.get("image", None)
         if not file_metas or len(file_metas) != 1:
             self.write(json.dumps({
@@ -99,13 +101,15 @@ class UploadHandler(BaseHandler):
 
         path = "/var/tmp" if os.path.exists('/var/tmp') else os.curdir + os.path.sep + 'tmp'
         filename = FileManager.write(path, file_metas[0]['body'])
-        print(filename, flush=True)
         faces = predict_by_filename(filename)
         ok = []
         for face in faces:
-            print(face.shape, flush=True)
             ok.append(single_face_model.get_id_by_image(face))
-            print(ok[-1], flush=True)
+
+        for uid in ok:
+            global_backend_service.execute_sql(
+                """INSERT INTO Records VALUES ('%s', %d, %d, true)""" % (uid, cid, int(time.time() * 1000))
+            )
 
         self.redirect("/")
 

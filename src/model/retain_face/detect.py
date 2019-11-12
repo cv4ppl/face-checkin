@@ -67,7 +67,9 @@ def predict_by_filename(filename: str):
     # testing begin
     image_path = filename
     img_raw = cv2.imread(image_path, cv2.IMREAD_COLOR)
-
+    scale = max(img_raw.shape[1] / 384.0, img_raw.shape[0] / 512.0)
+    new_size = (int(img_raw.shape[1] / scale), int(img_raw.shape[0] / scale))
+    img_raw = cv2.resize(img_raw, new_size)
     img = np.float32(img_raw)
 
     im_height, im_width, _ = img.shape
@@ -108,7 +110,7 @@ def predict_by_filename(filename: str):
 
     ret = []
     for b in dets:
-        if b[4] < 0.6:
+        if b[4] < 0.9:
             continue
 
         b = list(map(int, b))
