@@ -2,13 +2,13 @@ import datetime
 import json
 import os
 
-import cv2
 from tornado import web
 
-from src.server.backend_service import BackendService
-from src.server.file_manager import FileManager
 from src.model.retain_face.detect import predict_by_filename
 from src.model.single_face_model import SingleFaceModel
+from src.server.backend_service import BackendService
+from src.server.file_manager import FileManager
+
 global_backend_service = BackendService()
 
 """
@@ -23,6 +23,7 @@ from tornado.web import RequestHandler
 from tornado.web import authenticated
 
 single_face_model = SingleFaceModel()
+
 
 class BaseHandler(RequestHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
@@ -65,6 +66,7 @@ class BaseHandler(RequestHandler):
             method: Callable[..., Optional[Awaitable[None]]]
     ) -> Callable[..., Optional[Awaitable[None]]]:
         return BaseHandler.role_authenticated(role='Admin', method=method)
+
 
 class ManagerHandler(BaseHandler):
     @web.authenticated
@@ -112,11 +114,10 @@ class DashboardHandler(BaseHandler):
     # @web.authenticated
     def get(self):
         uid = self.get_current_user()
-        uid = "1"
         user = global_backend_service.get_user_by_uid(uid)[0]
 
-        assert user[-1] in ("admin", "student")
-        if user[-1] == "admin":
+        assert user[-1] in ("Admin", "student")
+        if user[-1] == "Admin":
             valid_list = global_backend_service.get_all_records()
         else:
             valid_list = global_backend_service.get_user_by_uid(user[0])

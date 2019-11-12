@@ -14,6 +14,7 @@ from tornado import options
 from src.model import utils
 from src.server.backend_service import BackendService
 
+
 class DataProvider:
     def __init__(self):
         self.backend_service = BackendService()
