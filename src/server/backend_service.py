@@ -56,8 +56,14 @@ class BackendService:
         # print(self.__cursor.execute("SELECT * FROM USERS").fetchall())
         self.commit()
 
+    def add_course(self, course_name):
+        self.__cursor.execute('INSERT INTO COURSES (NAME) VALUES (?)', (course_name,))
+        self.commit()
+
+
+
     def get_courses(self):
-        courses = self.__cursor.execute('SELECT CID, NAME, CHECKIN_OPEN, CHECKIN_CLOSE FROM COURSES').fetchall()
+        courses = self.__cursor.execute('SELECT CID, NAME FROM COURSES').fetchall()
         return courses
 
     def get_user_records(self, uid):

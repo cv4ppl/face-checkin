@@ -73,12 +73,21 @@ class ManagerHandler(BaseHandler):
     @web.authenticated
     def get(self):
         # TODO(): Base page, show all course with button(redirect dashboard?uid=*&cid=*)
-        self.render("manage.html")
+        courses = self.application.back_service.get_courses()
+        courses = sorted(courses)
+        record_id = 0
+        courses_records = []
+        for course in courses:
+            courses_records.append({
+                "cid": course[0],
+                "name": course[1]
+            })
+        self.render("manage.html", courses=courses_records)
         pass
 
     @web.authenticated
     def post(self):
-        # TODO(): operation    
+        # TODO(): operation
         #                   -> insert course in Course
         #                   -> delete course (OPTIONAL)
         pass
@@ -87,11 +96,12 @@ class ManagerHandler(BaseHandler):
 class UploadHandler(BaseHandler):
     @web.authenticated
     def get(self):
-        return self.render("upload.html")
+        cid = int(self.get_argument('cid'))
+        return self.render("upload.html", cid=cid)
 
     @web.authenticated
     def post(self):
-        cid = int(self.get_argument("cid", "1"))  # TODO: get real cid
+        cid = int(self.get_argument("cid"))
         file_metas = self.request.files.get("image", None)
         if not file_metas or len(file_metas) != 1:
             self.write(json.dumps({
@@ -115,7 +125,7 @@ class UploadHandler(BaseHandler):
 
 
 class DashboardHandler(BaseHandler):
-    # @web.authenticated
+    @web.authenticated
     def get(self):
         uid = self.get_current_user()
         user = global_backend_service.get_user_by_uid(uid)[0]
@@ -161,7 +171,7 @@ class LoginHandler(BaseHandler):
         self.set_secure_cookie("user", username)
         self.set_secure_cookie("uid", uid)
         self.set_secure_cookie("role", auth_role)
-        self.redirect("/manage" if auth_role == 'Admin' else "/upload")
+        self.redirect("/" if auth_role == 'Admin' else "/upload")
 
 
 class RegisterHandler(BaseHandler):
@@ -177,21 +187,13 @@ class RegisterHandler(BaseHandler):
         self.render('login.html', info={"WELCOME": "注册完请登录"})
 
 
-class ManagerHandler(BaseHandler):
-    @BaseHandler.admin_authenticated
-    def get(self):
-        # TODO(): Base page, show all course with button(redirect dashboard?uid=*&cid=*)
-        # print(self.get_current_role())
-        # if self.get_current_role() == b'Student':
-        #     return self.redirect("/upload")
-        self.render("manage.html")
-        pass
+class AddCourse(BaseHandler):
 
+    @BaseHandler.admin_authenticated
     def post(self):
-        # TODO(): operation
-        #                   -> insert course in Course
-        #                   -> delete course (OPTIONAL)
-        pass
+        course_name = self.get_argument("name")
+        self.application.back_service.add_course(course_name)
+        return self.redirect('/')
 
 
 class CheckInHandler(BaseHandler):
@@ -209,7 +211,6 @@ class CheckInHandler(BaseHandler):
             courses_records.append({
                 "cid": course[0],
                 "name": course[1],
-                "time": str(course[2]) + '-' + str(course[3]),
                 # "checkin_num"
                 "is_checkin": is_checkin,
                 "disabled": "disabled" if is_checkin else ""

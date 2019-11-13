@@ -11,10 +11,11 @@ from src.server.backend_service import BackendService
 from src.server.handlers import (
     UploadHandler,
     LoginHandler,
-    ManagerHandler,
     DashboardHandler,
     RegisterHandler,
-    CheckInHandler
+    CheckInHandler,
+    AddCourse,
+    ManagerHandler
 )
 
 
@@ -30,10 +31,11 @@ class Server:
         self.app = tornado.web.Application([
             ("/login", LoginHandler),
             ("/upload", UploadHandler),
-            ("/manage", ManagerHandler),
             ("/", DashboardHandler),
             ("/register", RegisterHandler),
-            ("/checkin", CheckInHandler)
+            ("/checkin", CheckInHandler),
+            ("/addCourse", AddCourse),
+            ("/manage", ManagerHandler)
         ], **settings)
         self.app.back_service = BackendService()
         self.app.listen(tornado.options.options.port)

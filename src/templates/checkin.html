@@ -19,8 +19,6 @@
         <thead>
         <tr>
             <th> 课程名称</th>
-            <th> 签到时间</th>
-            <!--            <th> 已签到人数</th>-->
             <th> 是否签到</th>
             <th> 签到链接</th>
         </tr>
@@ -30,16 +28,12 @@
         {% for course in courses %}
         <tr id='{{ course["cid"] }}'>
             <th> {{ course["name"] }}</th>
-            <th> {{ course["time"] }}</th>
-            <!--            <th> course["checkin_num"] </th>-->
             <th> {{ course["is_checkin"] }}</th>
             <th>
-                <a class="btn btn-primary" course[
-                   data-loading-text="Loading..." href="upload?cid={{course['cid']}}" id="checkin-btn" {{"disabled"] }}
-                >
+                <a class="btn btn-primary" data-loading-text="Loading..."
+                   href="upload?cid={{course['cid']}}" id="checkin-btn" {{course["disabled"] }}>
                 签到
                 </a>
-
             </th>
         </tr>
         {% end %}
