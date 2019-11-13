@@ -66,11 +66,12 @@ class BackendService:
         self.commit()
 
     def get_courses(self):
-        courses = self.__cursor.execute('SELECT CID, NAME FROM COURSES').fetchall()
+        courses = self.__cursor.execute('SELECT cid, name FROM Courses').fetchall()
         return courses
 
     def get_user_records(self, uid):
-        records = self.__cursor.execute('SELECT CID, TIME FROM RECORDS WHERE RECORDS.UID = ?', (uid,)).fetchall()
+        records = self.__cursor.execute('SELECT cid, time FROM Records WHERE Records.uid = ?',
+                                        (uid.decode('utf8'),)).fetchall()
         return records
 
     def execute_sql(self, sql: str):

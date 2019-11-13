@@ -8,17 +8,10 @@ define('data_path', 'data', type=str, help="database to load")
 parse_command_line()
 
 
-def init():
-    default_tmp_path = "tmp"
-    if not os.path.exists(default_tmp_path):
-        os.makedirs(default_tmp_path)
-
-
 def main():
     from src.server.server import Server
     Server().run()
 
 
 if __name__ == '__main__':
-    init()
     main()

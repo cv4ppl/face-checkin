@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>人脸签到考勤系统</title>
+</head>
+<body>
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-auto mx-auto text" style="font-size: x-large;">
+      <a class="btn-link" href="/login">Login</a> / Register
+    </div>
+  </div>
+  <div class="row align-items-center mt-5">
+    <div class="col-auto mx-auto ">
+      <form action="login" method="post">
+        <input name="new" type="hidden" value="1">
+        <input id="pswd" name="password" type="hidden">
+        <div class="form-group">
+          <input class="form-control" id="username" name="username" placeholder="Username" type="text"
+                 value="{{username}}">
+        </div>
+        <div class="form-group">
+          <input class="form-control" id="raw" placeholder="Password" type="password">
+        </div>
+        <div class="form-group">
+          <input class="form-control" id="cfm" placeholder="Confirm password" type="password">
+        </div>
+        <div class="form-group">
+          <select class="btm btn-primary form-control" name="role">
+            <option value="Admin">Teacher</option>
+            <option value="Student">Student</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input class="btn btn-primary form-control" disabled id="submit" onclick="encode()" type="submit"
+                 value="Submit">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="{{static_url('js/md5.js')}}"></script>
+<script>
+    function password_onchange(ev) {
+        const raw = document.getElementById("raw").value;
+        const cfm = document.getElementById("cfm").value;
+        if (raw === cfm && raw.length >= 8) {
+            document.getElementById("submit").removeAttribute("disabled");
+        } else {
+            document.getElementById("submit").setAttribute("disabled", "true");
+        }
+    }
+
+    document.getElementById("cfm").oninput = password_onchange;
+    document.getElementById("raw").oninput = password_onchange;
+
+    function encode() {
+        const elem = document.getElementById("raw");
+        document.getElementById("pswd").value = md5(elem.value);
+    }
+</script>
+</body>
+</html>

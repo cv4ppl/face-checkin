@@ -1,114 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="{{ static_url('css/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
-    <link href="{{ static_url('css/style.css') }}" rel="stylesheet">
-
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="{{ static_url('js/md5.js') }}"></script>
-    <script src="{{ static_url('js/index.js') }}"></script>
-    <script type="text/javascript">
-
-    </script>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>人脸签到考勤系统</title>
 </head>
 <body>
-
-<div align="center" class="logo">
-    <img height="100px" src="{{ static_url('images/logo.png') }}">
-</div>
-<div align="center" class="title">
-    <img height="80px" src="{{ static_url('images/title.png') }}">
-</div>
-
-<div class="materialContainer">
-    <div class="box">
-
-        <form action="login" enctype="multipart/form-data" method="post">
-            <div class="title">登录</div>
-            <div class="input">
-                <label for="name">姓名</label>
-                <input id="name" name="name" type="text">
-                <span class="spin"></span>
-            </div>
-            <div class="input">
-                <label for="pw_pre_md5">密码</label>
-                <input id="pw_pre_md5" name="pw_pre_md5" type="password">
-                <span class="spin"></span>
-            </div>
-
-            <div>
-                <label for="role">身份</label>
-                <select id="role" name="role">
-                    <option value="Admin">管理员</option>
-                    <option value="Student">学生</option>
-                </select>
-                <span class="spin"></span>
-            </div>
-            <input id="passwd_md5" name="password" type="hidden"/>
-            <div class="button login">
-                <button onclick="md5_pwd('login')" type="submit" value="Sign in">
-                    <span>登录</span>
-                    <i class="fa fa-check"></i>
-                </button>
-            </div>
-
-        </form>
-        <!--        <div class="box">-->
-        <!--            <p id="infoBox"> <strong> {{ info }}}</strong></p>-->
-        <!--        </div>-->
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-auto mx-auto text" style="font-size: x-large;">
+      Login / <a class="btn-link" href="/login?new=1">Register</a>
     </div>
-
-
-    <div class="overbox">
-        <form action="register" enctype="multipart/form-data" method="post">
-            <div class="material-button alt-2">
-                <span class="shape"></span>
-            </div>
-            <div class="title">注册</div>
-            <div class="input">
-                <label for="regname">用户名</label>
-                <input id="regname" name="name" type="text">
-                <span class="spin"></span>
-            </div>
-            <div class="input">
-                <label for="regpass">密码</label>
-                <input id="regpass" name="password" type="password">
-                <span class="spin"></span>
-            </div>
-            <div class="input">
-                <label for="reregpass">确认密码</label>
-                <input id="reregpass" name="reregpass" type="password">
-                <span class="spin"></span>
-            </div>
-            <div>
-                <label for="registerRole">身份</label>
-                <select id="registerRole" name="registerRole">
-                    <option value="Admin">管理员</option>
-                    <option value="Student">学生</option>
-                </select>
-                <span class="spin"></span>
-
-            </div>
-            <input id="register_passwd_md5" name="password" type="hidden"/>
-            <div class="button" style="width: 100%">
-                <button onclick="md5_pwd('register')" style="width: 45%;" type="submit">
-                    <span>老师注册</span>
-                </button>
-                <button onclick="document.getElementById('registerRole').value='Student'; md5_pwd('register')"
-                        style="width: 45%; float: right"
-                        type="submit">
-                    <span>学生注册</span>
-                </button>
-            </div>
-        </form>
-
+  </div>
+  <div class="row align-items-center mt-5">
+    <div class="col-auto mx-auto ">
+      <form action="login" method="post">
+        <input id="pswd" name="password" type="hidden">
+        <div class="form-group row">
+          <input class="form-control" id="username" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group row">
+          <input class="form-control" id="password" placeholder="Password" type="password">
+        </div>
+        <div class="form-group row">
+          <input class="col btn btn-primary mr-2" onclick="encode()" type="submit" value="Login">
+        </div>
+      </form>
     </div>
-
+  </div>
 </div>
-
-<script src="{{ static_url('js/jquery.min.js') }}"></script>
-<script src="{{ static_url('js/index.js') }}"></script>
-
+<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="{{static_url('js/md5.js')}}"></script>
+<script>
+    function encode() {
+        const el = document.getElementById("password");
+        document.getElementById("pswd").value = md5(el.value);
+    }
+</script>
 </body>
 </html>

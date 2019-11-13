@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
-  <meta charset="UTF-8">
-  <title>Title</title>
   <script src="{{ static_url('js/jquery.min.js') }}"></script>
   <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+  <meta charset="UTF-8">
+  <title>人脸签到考勤系统</title>
   <!--    <link rel="stylesheet" src="{{ static_url('css/bootstrap.min.css') }}">-->
   <script>
   </script>
 </head>
-<body>
+<body class="container">
+<div class="row float-right mb-2">
+  <a class="btn btn-outline-primary " href="/">Home</a>
+</div>
 <div id="course-table">
   <table class="table">
     <caption>
@@ -26,14 +30,16 @@
     <tbody>
     {% if courses %}
     {% for course in courses %}
-    <tr id='{{ course["cid"] }}'>
+    <tr id='{{ course["cid"] }}' style="background-color: {{ 'palegreen' if course['disabled'] else 'white'}}">
       <th> {{ course["name"] }}</th>
       <th> {{ course["is_checkin"] }}</th>
       <th>
         <form action="checkin" class="form form-inline" enctype="multipart/form-data" method="post">
           <input class="form-group" name="cid" type="hidden" value="{{course['cid']}}">
-          <input accept="image/png, image/jpeg" class="form-group" name="image" type="file" value="Upload">
-          <input class="form-group btn btn-primary" type="submit" value="Submit">
+
+          {% if not course['disabled'] %}<input {{course['disabled']}} accept="image/png, image/jpeg" class="form-group"
+          name="image" type="file" value="Upload" id="select">
+          <input class="form-group btn btn-primary" type="submit" value="Submit" {{course['disabled']}}>{% end %}
         </form>
       </th>
     </tr>
@@ -42,7 +48,6 @@
     </tbody>
   </table>
 </div>
-
 <script>
 </script>
 </body>
