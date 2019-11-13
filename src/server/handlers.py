@@ -193,7 +193,7 @@ class AddCourse(BaseHandler):
     def post(self):
         course_name = self.get_argument("name")
         self.application.back_service.add_course(course_name)
-        return self.redirect('/')
+        return self.redirect('/manage')
 
 
 class CheckInHandler(BaseHandler):
@@ -220,3 +220,11 @@ class CheckInHandler(BaseHandler):
 
     def post(self):
         pass
+
+
+class DropCourse(BaseHandler):
+    @BaseHandler.admin_authenticated
+    def get(self):
+        cid = self.get_argument('cid')
+        self.application.back_service.delete_course(cid)
+        return self.redirect('/manage')
