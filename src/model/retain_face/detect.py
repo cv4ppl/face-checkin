@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import argparse
+import os
 
 import cv2
 import numpy as np
@@ -118,6 +119,33 @@ def predict_by_filename(filename: str):
         x0, y0 = b[0], b[1]
         x1, y1 = b[2], b[3]
 
+        half_x = abs(x1 - x0) // 2
+        half_y = abs(y1 - y0) // 2
+
+        y1 = min(img_raw.shape[0], y1 - half_y // 4)
+
+        while (x1 - x0) % 3:
+            x1 += 1
+        len_x = x1 - x0
+        len_y = len_x // 3 * 4
+
+        turn = True
+        while (y1 - y0) > len_y:
+            if turn:
+                y1 -= 1
+            else:
+                y0 += 1
+            turn = not turn
+
+        while (y1 - y0) < len_y:
+            if turn:
+                y1 += 1
+            else:
+                y0 -= 1
+            turn = not turn
+        ret.append(img_raw[y0:y1, x0:x1])
+        continue
+
         if x0 > x1:
             x0, x1 = x1, x0
         if y0 > y1:
@@ -159,8 +187,10 @@ def predict_by_filename(filename: str):
 
 
 if __name__ == "__main__":
-    parser.add_argument('--test_image', type=str, help='image to predict')
-    args = parser.parse_args()
-    for img in predict_by_filename(args.test_image):
-        cv2.imshow("haha", img)
-        cv2.waitKey(0)
+    for i in range(1, 5):
+        count = 0
+        for pic in os.listdir("data/raw/%d/" % i):
+            count += 1
+            filename = os.path.join("data/raw/%d" % i, pic)
+            for img in predict_by_filename(filename):
+                cv2.imwrite("data/train/%d/%d.jpg" % (i, count), img)

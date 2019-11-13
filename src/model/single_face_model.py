@@ -28,21 +28,21 @@ class DataProvider:
         :return: (list<numpy.array>, list<str>)
         """
         user_ids = self.backend_service.get_user_ids()
-
         images = []
         ids = []
 
         for user_id_tuple in user_ids:
             user_id = user_id_tuple[0]
             user = self.backend_service.get_user_by_uid(user_id)[0]
-
             if user[3]:
-                user_img = cv2.imread(user[3])
-                user_img = cv2.resize(user_img, (SYS_WIDTH, SYS_HEIGHT))
-                user_img = cv2.cvtColor(user_img, cv2.COLOR_BGR2GRAY)
-                user_img, _ = utils.Utils.im2vec(user_img.shape, user_img)
-                ids.append(user_id)
-                images.append(user_img)
+                for n in os.listdir(user[3]):
+                    filename = os.path.join(user[3], n)
+                    user_img = cv2.imread(filename)
+                    user_img = cv2.resize(user_img, (SYS_WIDTH, SYS_HEIGHT))
+                    user_img = cv2.cvtColor(user_img, cv2.COLOR_BGR2GRAY)
+                    user_img, _ = utils.Utils.im2vec(user_img.shape, user_img)
+                    ids.append(user_id)
+                    images.append(user_img)
         return np.array(images), np.array(ids)
 
 
@@ -126,7 +126,7 @@ class SingleFaceModel:
         print("calculating svd ...")
         U, sig, VT = np.linalg.svd(data)
         sig = np.diag(sig)
-        K = min(len(sig), 10)
+        K = min(len(sig), 20)
 
         _U = []
 
@@ -177,16 +177,16 @@ def test_acc():
     model = SingleFaceModel()
     model.train()
 
-    acc_count = 0
-    all_count = 0
-    for i in range(1, 4 + 1):
-        for j in range(1, 2):
-            print(i, j)
-            im = cv2.imread(os.path.join(options.options.data_path, "test", "s%d" % i, "%d.jpg" % j))
-            all_count += 1
-            acc_count += (str(i) == str(model.get_id_by_image(im, True)))
-
-    print("Acc: %.6f" % (acc_count / all_count))
+    # acc_count = 0
+    # all_count = 0
+    # for i in range(1, 4 + 1):
+    #     for j in range(1, 2):
+    #         print(i, j)
+    #         im = cv2.imread(os.path.join(options.options.data_path, "test", "s%d" % i, "%d.jpg" % j))
+    #         all_count += 1
+    #         acc_count += (str(i) == str(model.get_id_by_image(im, True)))
+    #
+    # print("Acc: %.6f" % (acc_count / all_count))
 
 
 if __name__ == "__main__":

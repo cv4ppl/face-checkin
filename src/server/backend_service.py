@@ -74,7 +74,7 @@ class BackendService:
         return self.execute_sql("""SELECT * FROM Courses WHERE cid = '%s'""" % cid)
 
     def get_all_records(self):
-        return self.execute_sql("""SELECT * FROM Records""")
+        return self.execute_sql("""SELECT * FROM Records ORDER BY time DESC""")
 
     def get_records_by_uid(self, uid: str):
         return self.execute_sql("""SELECT * FROM Records WHERE uid = '%s'""" % uid)

@@ -1,4 +1,3 @@
-import datetime
 import json
 import os
 
@@ -115,16 +114,16 @@ class UploadHandler(BaseHandler):
 
 
 class DashboardHandler(BaseHandler):
-    # @web.authenticated
+    @web.authenticated
     def get(self):
         uid = self.get_current_user()
         user = global_backend_service.get_user_by_uid(uid)[0]
 
-        assert user[-1] in ("Admin", "student")
+        assert user[-1] in ("Admin", "Student")
         if user[-1] == "Admin":
             valid_list = global_backend_service.get_all_records()
         else:
-            valid_list = global_backend_service.get_user_by_uid(user[0])
+            valid_list = global_backend_service.get_records_by_uid(user[0])
 
         stringed_list = []
 
@@ -132,7 +131,7 @@ class DashboardHandler(BaseHandler):
             stringed_list.append({
                 "username": global_backend_service.get_user_by_uid(item[0])[0][1],
                 "course": global_backend_service.get_course_by_cid(item[1])[0][1],
-                "time": datetime.datetime.fromtimestamp(item[2] / 1000.0),
+                "time": item[2] // 1000,
                 "color": "green" if item[3] else "red"
             })
 
@@ -161,7 +160,7 @@ class LoginHandler(BaseHandler):
         self.set_secure_cookie("user", username)
         self.set_secure_cookie("uid", uid)
         self.set_secure_cookie("role", auth_role)
-        self.redirect("/manage" if auth_role == 'Admin' else "/upload")
+        self.redirect(self.get_argument("next", "/"))
 
 
 class RegisterHandler(BaseHandler):
