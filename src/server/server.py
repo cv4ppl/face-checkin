@@ -15,7 +15,8 @@ from src.server.handlers import (
     RegisterHandler,
     CheckInHandler,
     AddCourse,
-    ManagerHandler
+    ManagerHandler,
+    DropCourse
 )
 
 
@@ -35,7 +36,8 @@ class Server:
             ("/register", RegisterHandler),
             ("/checkin", CheckInHandler),
             ("/addCourse", AddCourse),
-            ("/manage", ManagerHandler)
+            ("/manage", ManagerHandler),
+            ("/dropCourse", DropCourse)
         ], **settings)
         self.app.back_service = BackendService()
         self.app.listen(tornado.options.options.port)

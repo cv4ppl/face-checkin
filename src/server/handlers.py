@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 
@@ -102,11 +103,7 @@ class UploadHandler(BaseHandler):
             )
         self.redirect('/')
 
-
-# for uid in ok:
-#     global_backend_service.execute_sql(
-#         """INSERT INTO Records VALUES ('%s', %d, %d, true)""" % (uid, cid, int(time.time() * 1000))
-#     )
+        self.redirect("/")
 
 
 class DashboardHandler(BaseHandler):
@@ -178,7 +175,7 @@ class AddCourse(BaseHandler):
     def post(self):
         course_name = self.get_argument("name")
         self.application.back_service.add_course(course_name)
-        return self.redirect('/')
+        return self.redirect('/manage')
 
 
 class CheckInHandler(BaseHandler):
@@ -226,3 +223,11 @@ class CheckInHandler(BaseHandler):
         for u in all_users:
             uid_to_name[u[0]] = u[1]
         self.render("upload.html", possible_users=ok, uid_to_name=uid_to_name, cid=cid)
+
+
+class DropCourse(BaseHandler):
+    @BaseHandler.admin_authenticated
+    def get(self):
+        cid = self.get_argument('cid')
+        self.application.back_service.delete_course(cid)
+        return self.redirect('/manage')

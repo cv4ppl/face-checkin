@@ -60,6 +60,11 @@ class BackendService:
         self.__cursor.execute('INSERT INTO COURSES (NAME) VALUES (?)', (course_name,))
         self.commit()
 
+    def delete_course(self, course_id):
+        self.__cursor.execute('DELETE FROM RECORDS WHERE CID = ?', course_id)
+        self.__cursor.execute('DELETE FROM COURSES WHERE CID = ?', course_id)
+        self.commit()
+
     def get_courses(self):
         courses = self.__cursor.execute('SELECT CID, NAME FROM COURSES').fetchall()
         return courses
