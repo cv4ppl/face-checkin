@@ -130,7 +130,7 @@ class DashboardHandler(BaseHandler):
         uid = self.get_current_user()
         user = global_backend_service.get_user_by_uid(uid)[0]
 
-        assert user[-1] in ("Admin", "student")
+        assert user[-1] in ("Admin", "Student")
         if user[-1] == "Admin":
             valid_list = global_backend_service.get_all_records()
         else:
@@ -171,7 +171,7 @@ class LoginHandler(BaseHandler):
         self.set_secure_cookie("user", username)
         self.set_secure_cookie("uid", uid)
         self.set_secure_cookie("role", auth_role)
-        self.redirect("/" if auth_role == 'Admin' else "/upload")
+        self.redirect(self.get_argument("next", "/"))
 
 
 class RegisterHandler(BaseHandler):
