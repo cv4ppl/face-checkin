@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>人脸签到考勤系统</title>
+  <script src="{{ static_url('js/jquery.min.js') }}"></script>
+  <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
 </head>
 <body>
-<form action="upload" enctype="multipart/form-data" method="post">
-  <label for="picker">Choose a profile picture:</label>
-  <input accept="image/png, image/jpeg"
-         id="picker" name="image"
-         type="file">
-  <button id="submit">Submit</button>
-</form>
-
+<div class="container">
+  <div class="row float-right mb-2">
+    <a class="btn btn-outline-primary " href="/">Home</a>
+  </div>
+  <form action="upload" class="form text-center mx-auto " method="post">
+    <label style="font-size: x-large;">请确认自动识别信息</label>
+    <input name="cid" type="hidden" value="{{cid}}">
+    <div class="row form-group mx-auto align-items-center align-self-center">
+      {% for possibility, img_src in possible_users %}
+      <div class="col-auto mr-2 ml-5 mx-auto">
+        <div class="row my-3">
+          <img src="{{static_url(img_src)}}" width="128"/>
+        </div>
+        <div class="row my-3">
+          <select class="btn btn-primary" name="uid" style="width: max-content; font-size: large;">
+            {% for uid, prob in possibility %}
+            <option class="list-item" value="{{uid}}">{{uid_to_name[uid]}}: {{"%.3f" % prob}}</option>
+            {% end %}
+          </select>
+        </div>
+      </div>
+      {% end %}
+    </div>
+    <input class="btn btn-primary" type="submit" value="Confirm">
+  </form>
+</div>
 <script>
 </script>
 </body>

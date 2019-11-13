@@ -50,11 +50,29 @@ class BackendService:
             count = self.__cursor.execute('SELECT * FROM USERS WHERE NAME = ? AND UID = ?', (username, uid))
             return len(count.fetchall()) == 1
 
-    def register_user(self, username: str, uid: str, password: str, role: str) -> bool:
+    def register_user(self, username: str, uid: str, password: str, role: str) -> None:
         self.__cursor.execute('INSERT INTO USERS (name, uid, password, role) VALUES (?, ?, ?, ?)'
                               , (username, uid, password, role))
         # print(self.__cursor.execute("SELECT * FROM USERS").fetchall())
         self.commit()
+
+    def add_course(self, course_name):
+        self.__cursor.execute('INSERT INTO COURSES (NAME) VALUES (?)', (course_name,))
+        self.commit()
+
+    def delete_course(self, course_id):
+        self.__cursor.execute('DELETE FROM RECORDS WHERE CID = ?', course_id)
+        self.__cursor.execute('DELETE FROM COURSES WHERE CID = ?', course_id)
+        self.commit()
+
+    def get_courses(self):
+        courses = self.__cursor.execute('SELECT cid, name FROM Courses').fetchall()
+        return courses
+
+    def get_user_records(self, uid):
+        records = self.__cursor.execute('SELECT cid, time FROM Records WHERE Records.uid = ?',
+                                        (uid.decode('utf8'),)).fetchall()
+        return records
 
     def execute_sql(self, sql: str):
         result = self.__cursor.execute(sql).fetchall()
@@ -67,6 +85,9 @@ class BackendService:
     def get_course_ids(self):
         return self.execute_sql("""SELECT cid FROM Courses""")
 
+    def get_all_users(self):
+        return self.execute_sql("""SELECT * FROM Users""")
+
     def get_user_by_uid(self, uid: str):
         return self.execute_sql("""SELECT * FROM Users WHERE uid = '%s'""" % uid)
 
@@ -74,7 +95,7 @@ class BackendService:
         return self.execute_sql("""SELECT * FROM Courses WHERE cid = '%s'""" % cid)
 
     def get_all_records(self):
-        return self.execute_sql("""SELECT * FROM Records""")
+        return self.execute_sql("""SELECT * FROM Records ORDER BY time DESC""")
 
     def get_records_by_uid(self, uid: str):
         return self.execute_sql("""SELECT * FROM Records WHERE uid = '%s'""" % uid)

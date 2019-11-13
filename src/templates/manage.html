@@ -1,15 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-  <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+  <title>人脸签到考勤系统</title>
+  <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ static_url('css/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
+
+  <script src="{{ static_url('js/vue.js') }}"></script>
+  <script src="{{ static_url('js/buefy.min.js') }}"></script>
+  <script src="{{ static_url('js/jquery.min.js') }}"></script>
+  <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+
 </head>
-<body>
-<div>
-  <!-- TODO Course List-->
+<body class="container">
+<div class="row float-right mb-2">
+  <a class="btn btn-outline-primary " href="/">Home</a>
 </div>
+<div id="course-table">
+  <table class="table">
+    <caption>
+      签到课程总览:
+
+    </caption>
+    <thead>
+    <tr>
+      <th> 课程名称</th>
+      <th> 删除课程</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if courses %}
+    {% for course in courses %}
+    <tr id='{{ course["cid"] }}'>
+      <th> {{ course["name"] }}</th>
+
+      <th><a class="btn btn-danger" href='/dropCourse?cid={{ course["cid"] }}'> X </a></th>
+    </tr>
+    {% end %}
+    {% end %}
+    </tbody>
+  </table>
+  <form action="addCourse" enctype="multipart/form-data" method="post">
+    <div class="title">添加课程</div>
+    <b-field label="课程名">
+      <b-input value="Kevin Garvey"></b-input>
+    </b-field>
+    <div class="input">
+      <label for="name">课程名</label>
+      <input id="name" name="name" type="text">
+      <span class="spin"></span>
+    </div>
+    <button class="btn btn-primary" type="submit" value="增加课程">
+      <span>增加课程</span>
+    </button>
+  </form>
+</div>
+
 <script>
 </script>
 </body>

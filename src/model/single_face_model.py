@@ -28,21 +28,21 @@ class DataProvider:
         :return: (list<numpy.array>, list<str>)
         """
         user_ids = self.backend_service.get_user_ids()
-
         images = []
         ids = []
 
         for user_id_tuple in user_ids:
             user_id = user_id_tuple[0]
             user = self.backend_service.get_user_by_uid(user_id)[0]
-
             if user[3]:
-                user_img = cv2.imread(user[3])
-                user_img = cv2.resize(user_img, (SYS_WIDTH, SYS_HEIGHT))
-                user_img = cv2.cvtColor(user_img, cv2.COLOR_BGR2GRAY)
-                user_img, _ = utils.Utils.im2vec(user_img.shape, user_img)
-                ids.append(user_id)
-                images.append(user_img)
+                for n in os.listdir(user[3]):
+                    filename = os.path.join(user[3], n)
+                    user_img = cv2.imread(filename)
+                    user_img = cv2.resize(user_img, (SYS_WIDTH, SYS_HEIGHT))
+                    user_img = cv2.cvtColor(user_img, cv2.COLOR_BGR2GRAY)
+                    user_img, _ = utils.Utils.im2vec(user_img.shape, user_img)
+                    ids.append(user_id)
+                    images.append(user_img)
         return np.array(images), np.array(ids)
 
 
@@ -71,23 +71,24 @@ class SingleFaceModel:
 
         dif = img - avr
         f = np.dot(dif, PT)
-        for i in range(len(F)):
-            dis = 1e100
-            u = -1
-            for j in range(len(F)):
-                tmp = np.linalg.norm(np.abs(f - F[j]))
 
-                if tmp < dis:
-                    dis = tmp
-                    u = j
-
-        if show:
-            original = utils.Utils.vec2im(img, shape)
-            result = utils.Utils.vec2im(_dif[u] + avr, shape)
-            v_merge = np.vstack((original, result))
-            cv2.imshow("ori + res", v_merge)
-            cv2.waitKey(0)
-        return uid[u]
+        max_logits = dict()
+        for j in range(len(F)):
+            if uid[j] in max_logits:
+                max_logits[uid[j]] = max(max_logits[uid[j]], -np.log(np.linalg.norm(np.abs(f - F[j]))))
+            else:
+                max_logits[uid[j]] = -np.linalg.norm(np.abs(f - F[j]))
+        s = sum([np.exp(x) for x in max_logits.values()])
+        v = []
+        k = []
+        for key, value in max_logits.items():
+            v.append(np.exp(value) / s)
+            k.append(key)
+        sorted_idx = np.argsort(v)
+        ret = []
+        for i in reversed(sorted_idx):
+            ret.append([k[i], v[i]])
+        return ret
 
     def train(self):
         n_dot = 2
@@ -126,7 +127,7 @@ class SingleFaceModel:
         print("calculating svd ...")
         U, sig, VT = np.linalg.svd(data)
         sig = np.diag(sig)
-        K = min(len(sig), 10)
+        K = min(len(sig), 20)
 
         _U = []
 
@@ -177,16 +178,16 @@ def test_acc():
     model = SingleFaceModel()
     model.train()
 
-    acc_count = 0
-    all_count = 0
-    for i in range(1, 4 + 1):
-        for j in range(1, 2):
-            print(i, j)
-            im = cv2.imread(os.path.join(options.options.data_path, "test", "s%d" % i, "%d.jpg" % j))
-            all_count += 1
-            acc_count += (str(i) == str(model.get_id_by_image(im, True)))
-
-    print("Acc: %.6f" % (acc_count / all_count))
+    # acc_count = 0
+    # all_count = 0
+    # for i in range(1, 4 + 1):
+    #     for j in range(1, 2):
+    #         print(i, j)
+    #         im = cv2.imread(os.path.join(options.options.data_path, "test", "s%d" % i, "%d.jpg" % j))
+    #         all_count += 1
+    #         acc_count += (str(i) == str(model.get_id_by_image(im, True)))
+    #
+    # print("Acc: %.6f" % (acc_count / all_count))
 
 
 if __name__ == "__main__":
