@@ -11,7 +11,7 @@
 <body>
 <div class="record-table">
   <div class="upload">
-    <button onclick="window.location.href='/upload'" style="width: 100%;">Check In</button>
+      <button onclick="window.location.href='/checkin'" style="width: 100%;">Check In</button>
   </div>
   <table class="display" id="myTable">
     <thead>
@@ -31,8 +31,24 @@
     {% end %}
     </tbody>
   </table>
+
+  <form action="addCourse" enctype="multipart/form-data" method="post">
+    <div class="title">添加课程</div>
+    <b-field label="课程名">
+      <b-input value="Kevin Garvey"></b-input>
+    </b-field>
+    <div class="input">
+      <label for="name">课程名</label>
+      <input id="name" name="name" type="text">
+      <span class="spin"></span>
+    </div>
+    <button type="submit" value="增加课程">
+      <span>增加课程</span>
+      <i class="fa fa-check"></i>
+    </button>
+  </form>
 </div>
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="{{ static_url('js/jquery.min.js') }}"></script>
 <script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
