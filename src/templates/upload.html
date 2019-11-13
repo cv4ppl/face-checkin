@@ -1,19 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
+
   <meta charset="UTF-8">
   <title>Title</title>
+  <script src="{{ static_url('js/jquery.min.js') }}"></script>
+  <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
 </head>
 <body>
-<form action="upload" enctype="multipart/form-data" method="post">
-  <label for="picker">Choose a profile picture:</label>
-  <input accept="image/png, image/jpeg"
-         id="picker" name="image"
-         type="file">
-  <input name="cid" type="hidden" value="{{cid}}">
-  <button id="submit">Submit</button>
-</form>
-
+<div class="container">
+  <form action="upload" class="form text-center" method="post">
+    <label>请确认自动识别信息</label>
+    <input name="cid" type="hidden" value="{{cid}}">
+    {% for possibility, img_src in possible_users %}
+    <div class="row form-group ">
+      <div class="col-auto">
+        <img src="{{static_url(img_src)}}" width="128"/>
+      </div>
+      <div class="col-auto">
+        <select class="btn btn-primary" name="uid" style="width: max-content;">
+          {% for uid, prob in possibility %}
+          <option class="list-item" value="{{uid}}">{{uid_to_name[uid]}}: {{"%.3f" % prob}}</option>
+          {% end %}
+        </select>
+      </div>
+    </div>
+    {% end %}
+    <input class="btn btn-primary" type="submit" value="Confirm">
+  </form>
+</div>
 <script>
 </script>
 </body>

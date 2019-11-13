@@ -94,33 +94,19 @@ class ManagerHandler(BaseHandler):
 
 class UploadHandler(BaseHandler):
     @web.authenticated
-    def get(self):
-        cid = int(self.get_argument('cid'))
-        return self.render("upload.html", cid=cid)
-
-    @web.authenticated
     def post(self):
         cid = int(self.get_argument("cid"))
-        file_metas = self.request.files.get("image", None)
-        if not file_metas or len(file_metas) != 1:
-            self.write(json.dumps({
-                'result': 'Failed',
-            }))
-            return
-
-        path = "/var/tmp" if os.path.exists('/var/tmp') else os.curdir + os.path.sep + 'tmp'
-        filename = FileManager.write(path, file_metas[0]['body'])
-        faces = predict_by_filename(filename)
-        ok = []
-        for face in faces:
-            ok.append(single_face_model.get_id_by_image(face))
-
-        for uid in ok:
+        for uid in self.get_arguments("uid"):
             global_backend_service.execute_sql(
                 """INSERT INTO Records VALUES ('%s', %d, %d, true)""" % (uid, cid, int(time.time() * 1000))
             )
+        self.redirect('/')
 
-        self.redirect("/")
+
+# for uid in ok:
+#     global_backend_service.execute_sql(
+#         """INSERT INTO Records VALUES ('%s', %d, %d, true)""" % (uid, cid, int(time.time() * 1000))
+#     )
 
 
 class DashboardHandler(BaseHandler):
@@ -218,4 +204,25 @@ class CheckInHandler(BaseHandler):
         self.render('checkin.html', courses=courses_records)
 
     def post(self):
-        pass
+        cid = int(self.get_argument("cid"))
+        file_metas = self.request.files.get("image", None)
+        if not file_metas or len(file_metas) != 1:
+            self.write(json.dumps({
+                'result': 'Failed',
+            }))
+            return
+
+        path = "/var/tmp" if os.path.exists('/var/tmp') else os.curdir + os.path.sep + 'tmp'
+        filename = FileManager.write(path, file_metas[0]['body'])
+
+        faces = predict_by_filename(filename)
+        ok = []
+        for face, file in faces:
+            possibility = single_face_model.get_id_by_image(face)
+            ok.append((possibility, file))
+            print(possibility)
+        uid_to_name = dict()
+        all_users = global_backend_service.get_all_users()
+        for u in all_users:
+            uid_to_name[u[0]] = u[1]
+        self.render("upload.html", possible_users=ok, uid_to_name=uid_to_name, cid=cid)

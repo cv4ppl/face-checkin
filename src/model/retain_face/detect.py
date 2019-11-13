@@ -1,7 +1,9 @@
 from __future__ import print_function
 
 import argparse
+import hashlib
 import os
+import time
 
 import cv2
 import numpy as np
@@ -143,7 +145,10 @@ def predict_by_filename(filename: str):
             else:
                 y0 -= 1
             turn = not turn
-        ret.append(img_raw[y0:y1, x0:x1])
+        img_sub = img_raw[y0:y1, x0:x1]
+        fp = os.path.join("images/tmp", str(hashlib.md5(str(time.time_ns()).encode('utf8')).hexdigest() + ".jpg"))
+        cv2.imwrite(os.path.join("src/static", fp), img_sub)
+        ret.append((img_sub, fp))
         continue
 
         if x0 > x1:

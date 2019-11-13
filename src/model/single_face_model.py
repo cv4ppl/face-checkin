@@ -71,23 +71,24 @@ class SingleFaceModel:
 
         dif = img - avr
         f = np.dot(dif, PT)
-        for i in range(len(F)):
-            dis = 1e100
-            u = -1
-            for j in range(len(F)):
-                tmp = np.linalg.norm(np.abs(f - F[j]))
 
-                if tmp < dis:
-                    dis = tmp
-                    u = j
-
-        if show:
-            original = utils.Utils.vec2im(img, shape)
-            result = utils.Utils.vec2im(_dif[u] + avr, shape)
-            v_merge = np.vstack((original, result))
-            cv2.imshow("ori + res", v_merge)
-            cv2.waitKey(0)
-        return uid[u]
+        max_logits = dict()
+        for j in range(len(F)):
+            if uid[j] in max_logits:
+                max_logits[uid[j]] = max(max_logits[uid[j]], -np.log(np.linalg.norm(np.abs(f - F[j]))))
+            else:
+                max_logits[uid[j]] = -np.linalg.norm(np.abs(f - F[j]))
+        s = sum([np.exp(x) for x in max_logits.values()])
+        v = []
+        k = []
+        for key, value in max_logits.items():
+            v.append(np.exp(value) / s)
+            k.append(key)
+        sorted_idx = np.argsort(v)
+        ret = []
+        for i in reversed(sorted_idx):
+            ret.append([k[i], v[i]])
+        return ret
 
     def train(self):
         n_dot = 2

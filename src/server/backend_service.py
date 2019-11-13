@@ -60,8 +60,6 @@ class BackendService:
         self.__cursor.execute('INSERT INTO COURSES (NAME) VALUES (?)', (course_name,))
         self.commit()
 
-
-
     def get_courses(self):
         courses = self.__cursor.execute('SELECT CID, NAME FROM COURSES').fetchall()
         return courses
@@ -80,6 +78,9 @@ class BackendService:
 
     def get_course_ids(self):
         return self.execute_sql("""SELECT cid FROM Courses""")
+
+    def get_all_users(self):
+        return self.execute_sql("""SELECT * FROM Users""")
 
     def get_user_by_uid(self, uid: str):
         return self.execute_sql("""SELECT * FROM Users WHERE uid = '%s'""" % uid)
