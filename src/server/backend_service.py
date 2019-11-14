@@ -2,6 +2,7 @@
 Backend Service to connect to database.
 """
 import sqlite3
+import time
 
 import tornado.options
 
@@ -65,6 +66,16 @@ class BackendService:
         self.__cursor.execute('DELETE FROM COURSES WHERE CID = ?', course_id)
         self.commit()
 
+    def record(self, uid, cid):
+        self.execute_sql(
+            """INSERT INTO Records VALUES ('%s', %d, %d, true, null)""" % (uid, cid, int(time.time() * 1000))
+        )
+        self.commit()
+
+    def delete_record(self, rid: int):
+        self.__cursor.execute("""DELETE FROM Records WHERE rid = ?""", (rid,))
+        self.commit()
+
     def get_courses(self):
         courses = self.__cursor.execute('SELECT cid, name FROM Courses').fetchall()
         return courses
@@ -91,7 +102,7 @@ class BackendService:
     def get_user_by_uid(self, uid: str):
         return self.execute_sql("""SELECT * FROM Users WHERE uid = '%s'""" % uid)
 
-    def get_course_by_cid(self, cid: str):
+    def get_course_by_cid(self, cid: int):
         return self.execute_sql("""SELECT * FROM Courses WHERE cid = '%s'""" % cid)
 
     def get_all_records(self):
@@ -99,6 +110,9 @@ class BackendService:
 
     def get_records_by_uid(self, uid: str):
         return self.execute_sql("""SELECT * FROM Records WHERE uid = '%s'""" % uid)
+
+    def get_records_by_cid_and_uid(self, cid: int, uid: str):
+        return self.execute_sql("""SELECT * FROM Records WHERE cid = %d AND uid = '%s'""" % (cid, uid))
 
     def commit(self):
         self.__conn.commit()

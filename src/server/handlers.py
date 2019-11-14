@@ -18,7 +18,6 @@ import functools
 from typing import Optional, Awaitable, Callable
 import hashlib
 from tornado.web import RequestHandler
-import time
 from tornado.web import authenticated
 
 single_face_model = SingleFaceModel()
@@ -77,7 +76,6 @@ class ManagerHandler(BaseHandler):
         # TODO(): Base page, show all course with button(redirect dashboard?uid=*&cid=*)
         courses = self.application.back_service.get_courses()
         courses = sorted(courses)
-        record_id = 0
         courses_records = []
         for course in courses:
             courses_records.append({
@@ -100,9 +98,7 @@ class UploadHandler(BaseHandler):
     def post(self):
         cid = int(self.get_argument("cid"))
         for uid in self.get_arguments("uid"):
-            global_backend_service.execute_sql(
-                """INSERT INTO Records VALUES ('%s', %d, %d, true)""" % (uid, cid, int(time.time() * 1000))
-            )
+            global_backend_service.record(uid=uid, cid=cid)
         self.redirect('/')
 
 
@@ -125,7 +121,9 @@ class DashboardHandler(BaseHandler):
                 "username": global_backend_service.get_user_by_uid(item[0])[0][1],
                 "course": global_backend_service.get_course_by_cid(item[1])[0][1],
                 "time": item[2] // 1000,
-                "color": "green" if item[3] else "red"
+                "color": "green" if item[3] else "red",
+                "rid": item[4],
+                "cid": item[1],
             })
 
         self.render(
@@ -263,3 +261,45 @@ class DropCourse(BaseHandler):
         cid = self.get_argument('cid')
         self.application.back_service.delete_course(cid)
         return self.redirect('/manage')
+
+
+class DeleteRecord(BaseHandler):
+    @BaseHandler.admin_authenticated
+    def get(self):
+        rid = int(self.get_argument('rid'))
+        self.application.back_service.delete_record(rid)
+        return self.redirect('/')
+
+
+class CourseHandler(BaseHandler):
+    @BaseHandler.admin_authenticated
+    def get(self):
+        cid = int(self.get_argument('cid'))
+        course = global_backend_service.get_course_by_cid(cid)[0]
+        users = global_backend_service.get_all_users()
+
+        oks = []
+        nos = []
+        for user in users:
+            res = global_backend_service.get_records_by_cid_and_uid(cid, user[0])
+            if len(res):
+                res = res[0]
+                oks.append({
+                    'rid': res[4],
+                    'name': user[1],
+                    'time': res[2],
+                })
+            else:
+                nos.append({
+                    'name': user[1],
+                    'uid': user[0],
+                })
+        self.render(
+            template_name='course.html',
+            course={
+                "cid": course[0],
+                "name": course[1],
+            },
+            oks=oks,
+            nos=nos
+        )
