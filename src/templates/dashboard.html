@@ -7,7 +7,7 @@
   <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css">
   <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
   <script src="{{ static_url('js/jquery.min.js') }}"></script>
-  <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+  <script src="{{ static_url('js/bootstrap.min.js')}}"></script>
   <!-- TODO(Schureed): 1. modifies UI -->
   <!-- TODO(Schureed): 2. filter (name, time span and course combined) -->
 </head>
@@ -29,7 +29,7 @@
       {% for record in records %}
       <tr style="color: {{record['color']}}">
         <td>{{record["username"]}}</td>
-        <td>{{record["course"]}}</td>
+        <td><a href="course?cid={{record['cid']}}">{{record["course"]}}</a></td>
         <td>{{datetime.datetime.strftime(datetime.datetime.fromtimestamp(record["time"]), "%Y-%m-%d %H:%M:%S")}}</td>
       </tr>
       {% end %}
@@ -47,7 +47,6 @@
   </div>
   {% end %}
 </div>
-<script src="{{ static_url('js/jquery.min.js')}}"></script>
 <script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {

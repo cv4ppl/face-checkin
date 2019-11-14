@@ -33,8 +33,7 @@
     {% if courses %}
     {% for course in courses %}
     <tr id='{{ course["cid"] }}'>
-      <th> {{ course["name"] }}</th>
-
+      <th><a href="course?cid={{course['cid']}}">{{ course["name"] }}</a></th>
       <th><a class="btn btn-danger" href='/dropCourse?cid={{ course["cid"] }}'> X </a></th>
     </tr>
     {% end %}
@@ -46,18 +45,25 @@
     <b-field label="课程名">
       <b-input value="Kevin Garvey"></b-input>
     </b-field>
-    <div class="input">
+    <div class="input" id="textarea">
       <label for="name">课程名</label>
       <input id="name" name="name" type="text">
       <span class="spin"></span>
     </div>
-    <button class="btn btn-primary" type="submit" value="增加课程">
+    <button class="btn btn-primary" disabled id="bt" type="submit" value="增加课程">
       <span>增加课程</span>
     </button>
   </form>
 </div>
 
 <script>
+    document.getElementById("textarea").oninput = function (ev) {
+        if (ev.target.value.length > 0) {
+            document.getElementById("bt").removeAttribute("disabled");
+        } else {
+            document.getElementById("bt").setAttribute("disabled", "");
+        }
+    };
 </script>
 </body>
 </html>
