@@ -23,8 +23,7 @@
   {% for ok in oks %}
   <div class="row my-2">
     <div class="col"><a style="color: green">{{ok['name']}}</a></div>
-    <div class="col">{{datetime.datetime.strftime(datetime.datetime.fromtimestamp(ok["time"]/1000), "%Y-%m-%d
-      %H:%M:%S")}}
+    <div class="col">{{datetime.datetime.strftime(datetime.datetime.fromtimestamp(ok["time"]/1000), "%Y-%m-%d %H:%M:%S")}}
     </div>
     <div class="col"><a class="btn btn-link" href="deleteRecord?rid={{ok['rid']}}" style="color: red;">X</a></div>
   </div>
