@@ -22,18 +22,32 @@ raw.img -> | UploadHandler | ---> | FaceModel |
 ```plain
 - /
   |- src
-     |- server
-     |  |- upload_handler.py
-     |  |- backend_service.py
-     |
-     |- model
-     |  |- img2id.py
-     |  |- detect_face.py
-     |  |- match_face.py
-     |
-     |- templates
-        |- upload.html
-        |- dashboard.html
+	|- model
+	|	|- retain_face
+	|	|- single_face_model.py
+	|	|- utils.py
+	|
+    |- server
+    |  	|- backend_service.py
+    |  	|- file_manager.py
+	|	|- handlers.py
+	|	|- server.py
+	|
+    |- static
+    |  	|- css
+    |  	|- js
+    |
+    |- templates
+	|	|- checkin.html
+	|	|- dashboard.html
+	|	|- login.html
+	|	|- manage.html
+	|	|- register.html
+	|	|- upload.html
+	|
+	|- test
+	|	|-test.py
+	|
 ```
 
 
