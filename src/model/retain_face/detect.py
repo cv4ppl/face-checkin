@@ -197,5 +197,7 @@ if __name__ == "__main__":
         for pic in os.listdir("data/raw/%d/" % i):
             count += 1
             filename = os.path.join("data/raw/%d" % i, pic)
-            for img in predict_by_filename(filename):
+            for img, _ in predict_by_filename(filename):
+                # cv2.imshow("t", img)
+                # cv2.waitKey(0)
                 cv2.imwrite("data/train/%d/%d.jpg" % (i, count), img)

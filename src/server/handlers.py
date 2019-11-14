@@ -218,7 +218,6 @@ class CheckInHandler(BaseHandler):
         records = sorted(records)
         record_id = 0
         courses_records = []
-        print(records)
 
         for course in courses:
             is_checkin = False
