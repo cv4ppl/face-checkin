@@ -10,6 +10,8 @@ parse_command_line()
 
 def main():
     from src.server.server import Server
+    os.makedirs("src/static/images", exist_ok=True)
+    os.makedirs("src/static/images/tmp", exist_ok=True)
     Server().run()
 
 
