@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CheckinApp</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="button">Button</string>
+</resources>

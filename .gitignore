@@ -1,4 +1,14 @@
-/.idea
+**/.idea/
 tmp/*
 **/__pycache__
 node_modules/*
+*.iml
+**/.gradle
+**/local.properties
+**/.DS_Store
+**/local.properties
+**/.idea
+**/build
+**/captures
+**/.externalNativeBuild
+**/.cxx
