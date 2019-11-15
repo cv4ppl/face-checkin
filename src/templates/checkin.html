@@ -38,7 +38,7 @@
           <input class="form-group" name="cid" type="hidden" value="{{course['cid']}}">
 
           {% if not course['disabled'] %}<input {{course['disabled']}} accept="image/png, image/jpeg" class="form-group"
-          name="image" type="file" value="Upload" id="select">
+          name="image" type="file" value="Upload" id="select" capture>
           <input class="form-group btn btn-primary" type="submit" value="Submit" {{course['disabled']}}>{% end %}
         </form>
       </th>

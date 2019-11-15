@@ -25,7 +25,7 @@ from src.server.handlers import (
 class Server:
     def __init__(self):
         settings = {
-            "debug": True,
+            "debug": tornado.options.options.debug,
             "login_url": "/login",
             "cookie_secret": "cv4ppl/face-checkin",
             "template_path": os.path.join("src", "templates"),
