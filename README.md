@@ -6,11 +6,13 @@ Computer Vision Assignment in Soochow Univeristy: a face checkin project.
 
 Membership: Jiacheng Zhang, Han Zhang, Yongchang hao, Renjie Wang.
 
-It cotains three part: 
+It contains three part: 
 
 1. Face detection (DNN) and recognition (PCA) model
 2. Frontend module ( tornado + bootstrap + jquery )
 3. Android app migration
+
+
 
 ### Workflow
 ```plain
@@ -173,7 +175,7 @@ raw.img -> | Page Handlers | ---> | FaceModel |
 
 > Currently our software is not validated on Windows platform. (Nov 2019)
 
-Execute this command
+Execute this command 
 ```bash
 git clone https://github.com/cv4ppl/fack-checkin
 cd fack-checkin
@@ -185,7 +187,7 @@ python3 run.py --port=80 --debug=False
 
 
 
-### Android APK Binary files:
+### Android APK Binary files
 
 Baidu Netdisc:  https://pan.baidu.com/s/1fGFh4u0SNu6YSrgaHqHW7Q 提取码: kjn6 
 
